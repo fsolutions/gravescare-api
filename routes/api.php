@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\OrderPrimaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\API\RegisterController;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('order-primary', [OrderPrimaryController::class, 'store']);
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('orders', OrderController::class);

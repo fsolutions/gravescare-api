@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API;
+phonespace App\Http\Controllers\API;
 
 use Validator;
-use App\Models\Order;
+use App\Models\OrderPrimary;
 use Illuminate\Http\Request;
-use App\Http\Resources\Order as OrderResource;
+use App\Http\Resources\OrderPrimary as OrderPrimaryResource;
 use App\Http\Controllers\API\BaseController as BaseController;
 
-class OrderController extends BaseController
+class OrderPrimaryController extends BaseController
 {
   /**
    * Display a listing of the resource.
@@ -17,9 +17,9 @@ class OrderController extends BaseController
    */
   public function index()
   {
-    $orders = Order::all();
+    $orderPrimaries = OrderPrimary::all();
 
-    return $this->sendResponse(OrderResource::collection($orders), 'Orders retrieved successfully.');
+    return $this->sendResponse(OrderPrimaryResource::collection($orderPrimaries), 'Orders retrieved successfully.');
   }
 
   /**
@@ -33,17 +33,16 @@ class OrderController extends BaseController
     $input = $request->all();
 
     $validator = Validator::make($input, [
-      'name' => 'required',
-      'detail' => 'required'
+      'phone' => 'required'
     ]);
 
     if ($validator->fails()) {
       return $this->sendError('Validation Error.', $validator->errors());
     }
 
-    $order = Order::create($input);
+    $orderPrimary = OrderPrimary::create($input);
 
-    return $this->sendResponse(new OrderResource($order), 'Order created successfully.');
+    return $this->sendResponse(new OrderPrimaryResource($orderPrimary), 'Order created successfully.');
   }
 
   /**
@@ -54,13 +53,13 @@ class OrderController extends BaseController
    */
   public function show($id)
   {
-    $order = Order::find($id);
+    $orderPrimary = OrderPrimary::find($id);
 
-    if (is_null($order)) {
+    if (is_null($orderPrimary)) {
       return $this->sendError('Order not found.');
     }
 
-    return $this->sendResponse(new OrderResource($order), 'Order retrieved successfully.');
+    return $this->sendResponse(new OrderPrimaryResource($orderPrimary), 'Order retrieved successfully.');
   }
 
   /**
@@ -70,24 +69,21 @@ class OrderController extends BaseController
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Order $order)
+  public function update(Request $request, Order $orderPrimary)
   {
     $input = $request->all();
 
     $validator = Validator::make($input, [
-      'name' => 'required',
-      'detail' => 'required'
+      'phone' => 'required'
     ]);
 
     if ($validator->fails()) {
       return $this->sendError('Validation Error.', $validator->errors());
     }
 
-    $order->name = $input['name'];
-    $order->detail = $input['detail'];
-    $order->save();
+    $orderPrimary = OrderPrimary::update($input);
 
-    return $this->sendResponse(new OrderResource($order), 'Order updated successfully.');
+    return $this->sendResponse(new OrderPrimaryResource($orderPrimary), 'Order updated successfully.');
   }
 
   /**
@@ -96,9 +92,9 @@ class OrderController extends BaseController
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Order $order)
+  public function destroy(Order $orderPrimary)
   {
-    $order->delete();
+    $orderPrimary->delete();
 
     return $this->sendResponse([], 'Order deleted successfully.');
   }
